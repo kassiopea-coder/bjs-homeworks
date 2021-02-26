@@ -20,28 +20,21 @@ function getAverageMark(marks) {
    const numberOfMarks = 5;
    let marksAll = marks.length;
    let sumMarks = 0;
+   let sumMarksNew = 0;
 
-   if (marks.length === 0) {
-      return 0;
-   } else if (marksAll > numberOfMarks) {
-      let newArr = marks.slice(0, 5);
-      let newArrLength = newArr.length;
-      console.log(`Оценок больше 5, расчет будет произведен по первым пяти оценкам: ${newArr}`);
-      for (let mark of newArr) {
-         sumMarks += mark;
-      }
-      return sumMarks / newArrLength;
+   if (marksAll === 0)  return 0;
+   
+   let newArr = marks.slice(0, 5);
+   let newArrLength = newArr.length;
 
-   } else {
-      for (let mark of marks) {
-         sumMarks += mark;
-      }
-      return sumMarks / marksAll;
+   for (let mark of newArr) {
+      sumMarksNew += mark;
+   }
+   for (let mark of marks) {
+      sumMarks += mark;
    }
 
-
-
-
+   return (marksAll > numberOfMarks) ? sumMarksNew / newArrLength : sumMarks / marksAll;
 
 }
 
