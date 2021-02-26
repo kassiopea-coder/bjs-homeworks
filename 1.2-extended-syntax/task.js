@@ -10,9 +10,6 @@ function getResult(a, b, c) {
 
    } else if (discr > 0) {
       x = [(-b + Math.sqrt(discr)) / (2 * a), (-b - Math.sqrt(discr)) / (2 * a)];
-
-   } else if (discr < 0) {
-      x = [];
    }
 
    return x;
@@ -21,26 +18,31 @@ function getResult(a, b, c) {
 function getAverageMark(marks) {
 
    const numberOfMarks = 5;
-
    let marksAll = marks.length;
-
-   for (let i = 0; i < marksAll; i++) {
-      if (marks.length === 0) {
-         return 0;
-      } else if (marks.length >= numberOfMarks) {
-
-         let newArr = marks.slice(0, 5);
-         console.log(`Оценок больше 5, расчет будет произведен по первым пяти оценкам: ${newArr}`);
-      }
-   }
-
    let sumMarks = 0;
 
-   for (let mark of marks) {
-      sumMarks += mark;
+   if (marks.length === 0) {
+      return 0;
+   } else if (marksAll > numberOfMarks) {
+      let newArr = marks.slice(0, 5);
+      let newArrLength = newArr.length;
+      console.log(`Оценок больше 5, расчет будет произведен по первым пяти оценкам: ${newArr}`);
+      for (let mark of newArr) {
+         sumMarks += mark;
+      }
+      return sumMarks / newArrLength;
+
+   } else {
+      for (let mark of marks) {
+         sumMarks += mark;
+      }
+      return sumMarks / marksAll;
    }
 
-   return sumMarks / marksAll;
+
+
+
+
 }
 
 function askDrink(name, dateOfBirthday) {
