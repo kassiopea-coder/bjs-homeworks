@@ -17,24 +17,20 @@ function getResult(a, b, c) {
 
 function getAverageMark(marks) {
 
-   const numberOfMarks = 5;
+   //const numberOfMarks = 5;
    let marksAll = marks.length;
    let sumMarks = 0;
-   let sumMarksNew = 0;
 
-   if (marksAll === 0)  return 0;
-   
+   if (marksAll === 0) return 0;
+
    let newArr = marks.slice(0, 5);
    let newArrLength = newArr.length;
 
    for (let mark of newArr) {
-      sumMarksNew += mark;
-   }
-   for (let mark of marks) {
       sumMarks += mark;
    }
 
-   return (marksAll > numberOfMarks) ? sumMarksNew / newArrLength : sumMarks / marksAll;
+   return (sumMarks / newArrLength);
 
 }
 
