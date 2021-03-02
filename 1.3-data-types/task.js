@@ -2,26 +2,31 @@
 
 function calculateTotalMortgage(percent, contribution, amount, date) {
 
+
    //Корректность поля percent
-   if (percent == 0) return "Вы не заполнили поле Процентная ставка";
+   if (percent === 0 || percent === '') return "Вы не заполнили поле Процентная ставка";
    if (percent < 0) return "Процентная ставка не может быть отрицательной";
    if (isNaN(percent)) {
       return `Параметр 'Процентная ставка' содержит неправильное значение ${percent}`;
    };
 
    //Корректность поля contribution
-   //if (contribution == 0) return "Вы не заполнили поле Начальный взнос";
+   if (contribution === '') return "Вы не заполнили поле Начальный взнос";
    if (contribution < 0) return "Начальный взнос не может быть отрицательный";
    if (isNaN(contribution)) {
       return `Параметр 'Сумма первоначального взноса' содержит неправильное значение ${contribution}`;
    };
 
    //Корректность поля amount
-   if (amount == 0) return "Вы не заполнили поле Общая стоимость";
+   if (amount === 0 || amount === '') return "Вы не заполнили поле Общая стоимость";
    if (amount < 0) return "Общая стоимость не может быть отрицательной";
    if (isNaN(amount)) {
       return `Параметр 'Сумма кредита' содержит неправильное значение ${amount}`;
    };
+
+   contribution = parseFloat(contribution);
+   amount = parseFloat(amount);
+
    if (contribution > amount) {
       return 'Сумма начального взноса не может быть больше общей суммы по кредиту';
    };
@@ -29,23 +34,27 @@ function calculateTotalMortgage(percent, contribution, amount, date) {
    if (isNaN(date)) {
       return `Параметр 'Дата окончания кредита' содержит неправильное значение ${date}`;
    };
-   //const dateNow = new Date();
-   const dateNowYear = new Date().getFullYear();
-   const dateYear = date.getFullYear();
 
-   let differenceYear = dateYear - dateNowYear;
+   const dateNow = new Date();
+   const dateNowYear = dateNow.getFullYear(); //Текущий год
+   const dateNowMonth = dateNow.getMonth(); //Текущий месяц
 
-   if (differenceYear < 0) return "Срок кредита не может быть отрицательный";
+   const dateYear = date.getFullYear(); //Год выплаты кредита
+   const dateMonth = date.getMonth(); //Месяц выплаты кредита
+
+
+   let differenceYearMonth = (dateYear - dateNowYear) * 12 + (dateMonth - dateNowMonth);
+
+   if (differenceYearMonth === 0) differenceYearMonth = 1; //Если выплата кредита была в том же месяце
+   if (differenceYearMonth < 0) return "Срок кредита не может быть отрицательный";
 
    percent = parseFloat(percent / 100);
-   contribution = parseFloat(contribution);
-   amount = parseFloat(amount);
-   date = new Date(date);
+   //date = new Date(date);
 
-   let S = amount - contribution;
-   let P = percent / 12;
-   let month = differenceYear * 12;
-   let totalAmount = parseFloat((S * (P + P / ((1 + P) ** month - 1)) * month).toFixed(2));
+   let S = amount - contribution; // тело кредита
+   let P = percent / 12; //1/12 процентной ставки
+   //let month = differenceYear * 12;
+   let totalAmount = parseFloat((S * (P + P / ((1 + P) ** differenceYearMonth - 1)) * differenceYearMonth).toFixed(2));
    console.log(+totalAmount);
    return +totalAmount;
 
@@ -54,8 +63,9 @@ function calculateTotalMortgage(percent, contribution, amount, date) {
 
 function getGreeting(name) {
 
-   if (name === undefined || name.length === 0 || (name.indexOf(' ') > -1)) {
+   if (!name || !name.trim()) {
       name = 'Аноним';
+
    };
 
    let greeting = `Привет, мир! Меня зовут ${name}.`;
